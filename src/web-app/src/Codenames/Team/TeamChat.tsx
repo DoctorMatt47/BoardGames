@@ -4,7 +4,7 @@ import { KeyboardEvent, useState } from "react";
 function TeamChat({ team }: { team: TeamEnum }) {
   const master = "DoctorMatt";
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<string[]>([]);
 
   function onMessageKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
