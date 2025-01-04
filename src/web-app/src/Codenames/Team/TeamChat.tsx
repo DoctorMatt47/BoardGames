@@ -18,8 +18,8 @@ function TeamChat({ team }: { team: TeamEnum }) {
   }
 
   return (
-    <div className="flex flex-col space-y-3 bg-white bg-opacity-10 rounded p-1 lg:p-2">
-      <div className="max-h-48 overflow-y-auto space-y-2">
+    <div className="flex flex-col space-y-1 bg-white bg-opacity-10 rounded p-1 lg:p-2">
+      <div className="h-20 lg:h-40 overflow-y-auto space-y-1 lg:space-y-2">
         {messages.map((message, index) => (
           <div key={index}>
             <span className="text-emerald-400">{master}</span>: {message}
@@ -35,7 +35,7 @@ function TeamChat({ team }: { team: TeamEnum }) {
           onChange={event => setMessage(event.target.value)}
           onKeyDown={onMessageKeyDown}
         />
-        <button className="bg-emerald-700 hover:bg-emerald-600 text-white px-4 py-2 rounded" onClick={onSendMessage}>
+        <button className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-3 rounded" onClick={onSendMessage}>
           Send
         </button>
       </div>
