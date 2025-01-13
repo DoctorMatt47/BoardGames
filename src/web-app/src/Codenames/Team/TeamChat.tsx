@@ -1,10 +1,16 @@
 ﻿import { TeamEnum } from "./TeamEnum.ts";
-import { KeyboardEvent, useState } from "react";
+import { KeyboardEvent, useContext, useState } from "react";
+import { observer } from "mobx-react-lite";
+import AppPanel from "../../common/AppPanel.tsx";
+import AppButton from "../../common/AppButton.tsx";
+import AppInput from "../../common/AppInput.tsx";
+import { GameServiceContext } from "../common/GameService.ts";
+import { PlayerServiceContext } from "../common/PlayerService.ts";
 
 function TeamChat({ team }: { team: TeamEnum }) {
-  const master = "DoctorMatt";
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<string[]>([]);
+  const gameService = useContext(GameServiceContext);
+  const playerService = useContext(PlayerServiceContext);
 
   function onMessageKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
@@ -13,34 +19,46 @@ function TeamChat({ team }: { team: TeamEnum }) {
   }
 
   function onSendMessage() {
-    setMessages([...messages, message]);
-    setMessage("");
+    if (message) {
+      playerService.sendMessage(team, message).then(() => setMessage(""));
+    }
   }
 
   return (
-    <div className="flex flex-col space-y-1 bg-white bg-opacity-10 rounded p-1 lg:p-2">
+    <AppPanel>
       <div className="h-20 lg:h-40 overflow-y-auto space-y-1 lg:space-y-2">
-        {messages.map((message, index) => (
-          <div key={index}>
-            <span className="text-emerald-400">{master}</span>: {message}
-          </div>
-        ))}
+        {gameService.state.chatMessages
+          .filter(message => message.team === team)
+          .map((message, index) => (
+            <div key={index}>
+              <span className="text-emerald-400">{message.player}</span>: {message.value}
+            </div>
+          ))}
       </div>
-      <div className="flex flex-row space-x-3">
-        <input
-          type="text"
-          className="w-full border bg-white bg-opacity-15 rounded p-2"
-          placeholder="Type your message..."
-          value={message}
-          onChange={event => setMessage(event.target.value)}
-          onKeyDown={onMessageKeyDown}
-        />
-        <button className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-3 rounded" onClick={onSendMessage}>
-          Send
-        </button>
+      <div className="flex flex-row space-x-1 lg:space-x-2">
+        {playerService.isMaster(team) ? (
+          <>
+            <AppInput
+              disabled={!playerService.isPlayerTurn(team)}
+              value={message}
+              onChange={event => setMessage(event.target.value)}
+              onKeyDown={onMessageKeyDown}
+            />
+            <AppButton
+              className="w-4/12"
+              disabled={!playerService.isPlayerTurn(team)}
+              text="Send"
+              onClick={onSendMessage}
+            />
+          </>
+        ) : (
+          <AppButton disabled={!playerService.isPlayerTurn(team)} text="End turn" onClick={gameService.endTurn} />
+        )}
       </div>
-    </div>
+    </AppPanel>
   );
 }
 
-export default TeamChat;
+const TeamChatObserved = observer(TeamChat);
+
+export default TeamChatObserved;

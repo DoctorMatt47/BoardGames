@@ -1,4 +1,5 @@
 ﻿import { useState } from "react";
+import { observer } from "mobx-react-lite";
 
 function Cards({ className }: { className?: string }) {
   const [cards, setCards] = useState([
@@ -75,4 +76,6 @@ function Cards({ className }: { className?: string }) {
   );
 }
 
-export default Cards;
+const CardsObserved = observer(Cards);
+
+export default CardsObserved;
