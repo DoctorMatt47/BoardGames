@@ -2,19 +2,30 @@
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { GameServiceContext } from "../common/GameService.ts";
-import { PlayerServiceContext } from "../common/PlayerService.ts";
 
 function Settings() {
   const gameService = useContext(GameServiceContext);
-  const playerService = useContext(PlayerServiceContext);
+
+  function updateUsername() {
+    const username = prompt("Enter your new username");
+
+    if (username) {
+      void gameService.setUsername(username);
+    }
+  }
 
   return (
     <div className="w-full grid grid-cols-5 gap-x-1 lg:gap-x-2 text-gray-400 text-center mt-auto">
-      <AppButton className="text-xs" text="Nickname" />
-      <AppButton disabled={!playerService.isAdmin()} className="text-xs" text="Restart" />
-      <AppButton disabled={!playerService.isAdmin()} className="text-xs" text="Shuffle" />
-      <AppButton disabled={!playerService.isAdmin()} className="text-xs" text="Nickname" />
-      <AppButton disabled={!playerService.isAdmin()} className="text-xs" text="Nickname" />
+      <AppButton className="text-xs" text="Username" onClick={updateUsername} />
+      <AppButton
+        disabled={!gameService.isAdmin()}
+        className="text-xs"
+        text="Restart"
+        onClick={() => gameService.restartGame()}
+      />
+      <AppButton disabled={!gameService.isAdmin()} className="text-xs" text="Shuffle" />
+      <AppButton disabled={!gameService.isAdmin()} className="text-xs" text="Nickname" />
+      <AppButton disabled={!gameService.isAdmin()} className="text-xs" text="Nickname" />
     </div>
   );
 }

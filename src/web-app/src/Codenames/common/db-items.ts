@@ -1,7 +1,7 @@
 ﻿export interface RoomDbItem {
   chatMessages: ChatMessageDbItem[];
   players: PlayerDbItem[];
-  words: WordDbItem[];
+  cards: CardDbItem[];
 }
 
 export interface ChatMessageDbItem {
@@ -19,9 +19,14 @@ export interface PlayerDbItem {
   color: string;
 }
 
-export interface WordDbItem {
-  id: string;
+export interface CardDbItem {
+  id: number;
   value: string;
   color: string;
   revealed: boolean;
+}
+
+export interface GameStateDbItem {
+  turn: { team: string; isMaster: boolean } | null;
+  result: { team: string; win: boolean } | null;
 }

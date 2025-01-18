@@ -4,20 +4,21 @@ import { observer } from "mobx-react-lite";
 import AppButton from "../../common/AppButton.tsx";
 import AppPanel from "../../common/AppPanel.tsx";
 import { GameServiceContext } from "../common/GameService.ts";
-import { PlayerServiceContext } from "../common/PlayerService.ts";
+import Player from "./Player.tsx";
 
 function TeamPlayerList({ team }: { team: TeamEnum }) {
   const gameService = useContext(GameServiceContext);
-  const playerService = useContext(PlayerServiceContext);
   const master = gameService.getMaster(team);
 
   return (
     <>
       <div className="lg:text-xl text-center mt-1 lg:mt-2">Master</div>
       {master ? (
-        <AppPanel>{master.name}</AppPanel>
+        <AppPanel>
+          <Player player={master} />
+        </AppPanel>
       ) : (
-        <AppButton text="Become master" onClick={() => playerService.becomeMaster(team)} />
+        <AppButton text="Become master" onClick={() => gameService.becomeMaster(team)} />
       )}
       <div className="lg:text-xl text-center mt-1 lg:mt-2">Players</div>
       <AppPanel>
@@ -26,10 +27,10 @@ function TeamPlayerList({ team }: { team: TeamEnum }) {
             .filter(player => player.team === team.toString())
             .filter(player => !player.isMaster)
             .map((player, index) => (
-              <div key={index}>{player.name}</div>
+              <Player key={index} player={player} />
             ))}
         </div>
-        <AppButton text="Join team" onClick={() => playerService.joinTeam(team)} />
+        <AppButton text="Join team" onClick={() => gameService.joinTeam(team)} />
       </AppPanel>
     </>
   );

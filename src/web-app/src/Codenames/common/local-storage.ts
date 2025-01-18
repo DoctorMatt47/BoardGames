@@ -25,3 +25,11 @@ export function getClientColor() {
 
   return clientColor;
 }
+
+export function getClientUsername() {
+  return localStorage.getItem("clientUsername") || "Guest";
+}
+
+export function setClientUsername(username: string) {
+  localStorage.setItem("clientUsername", username);
+}
