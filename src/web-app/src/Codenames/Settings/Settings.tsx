@@ -18,14 +18,14 @@ function Settings() {
     <div className="w-full grid grid-cols-5 gap-x-1 lg:gap-x-2 text-gray-400 text-center mt-auto">
       <AppButton className="text-xs" text="Username" onClick={updateUsername} />
       <AppButton
-        disabled={!gameService.isAdmin()}
+        disabled={!gameService.player!.isAdmin}
         className="text-xs"
         text="Restart"
-        onClick={() => gameService.restartGame()}
+        onClick={() => gameService.startGame()}
       />
-      <AppButton disabled={!gameService.isAdmin()} className="text-xs" text="Shuffle" />
-      <AppButton disabled={!gameService.isAdmin()} className="text-xs" text="Nickname" />
-      <AppButton disabled={!gameService.isAdmin()} className="text-xs" text="Nickname" />
+      <AppButton disabled={!gameService.player!.isAdmin} className="text-xs" text="Shuffle" />
+      <AppButton disabled={!gameService.player!.isAdmin} className="text-xs" text="Nickname" />
+      <AppButton disabled={!gameService.player!.isAdmin} className="text-xs" text="Nickname" />
     </div>
   );
 }

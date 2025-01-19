@@ -13,7 +13,7 @@ function Player({ player }: { player: PlayerDbItem }) {
       return <span>👑</span>;
     }
 
-    if (gameService.isAdmin()) {
+    if (gameService.player!.isAdmin) {
       return (
         <div>
           <span className="cursor-pointer" onClick={() => gameService.makeAdmin(player.clientId)}>

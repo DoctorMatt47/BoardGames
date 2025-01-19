@@ -2,6 +2,8 @@
   chatMessages: ChatMessageDbItem[];
   players: PlayerDbItem[];
   cards: CardDbItem[];
+  turn: TurnDbItem | null;
+  result: ResultDbItem | null;
 }
 
 export interface ChatMessageDbItem {
@@ -26,7 +28,17 @@ export interface CardDbItem {
   revealed: boolean;
 }
 
-export interface GameStateDbItem {
-  turn: { team: string; isMaster: boolean } | null;
-  result: { team: string; win: boolean } | null;
+export interface TurnDbItem {
+  team: string;
+  isMaster: boolean;
+}
+
+export interface ResultDbItem {
+  team: string;
+  win: boolean;
+}
+
+export interface WordDbItem {
+  id: string;
+  value: string;
 }

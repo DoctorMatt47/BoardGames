@@ -7,12 +7,14 @@ import { RoomRepository } from "./common/RoomRepository.ts";
 import Team from "./Team/Team.tsx";
 import Cards from "./Cards/Cards.tsx";
 import { TeamEnum } from "./Team/TeamEnum.ts";
+import { WordRepository } from "./common/WordRepository.ts";
 
 function Codenames() {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const roomRepository = useMemo(() => new RoomRepository(roomId!), [roomId]);
-  const gameService = useMemo(() => new GameService(roomRepository), [roomRepository]);
+  const wordRepository = useMemo(() => new WordRepository(), []);
+  const gameService = useMemo(() => new GameService(roomRepository, wordRepository), [roomRepository, wordRepository]);
 
   useEffect(() => {
     console.log("Subscribing to room");
