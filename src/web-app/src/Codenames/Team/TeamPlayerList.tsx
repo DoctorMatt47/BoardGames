@@ -30,7 +30,11 @@ function TeamPlayerList({ team }: { team: TeamEnum }) {
               <Player key={index} player={player} />
             ))}
         </div>
-        <AppButton text="Join team" onClick={() => gameService.joinTeam(team)} />
+        <AppButton
+          disabled={gameService.state.settings.isLocked}
+          text="Join team"
+          onClick={() => gameService.joinTeam(team)}
+        />
       </AppPanel>
     </>
   );

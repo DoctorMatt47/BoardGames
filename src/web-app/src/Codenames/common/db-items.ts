@@ -3,7 +3,7 @@
   players: PlayerDbItem[];
   cards: CardDbItem[];
   turn: TurnDbItem | null;
-  result: ResultDbItem | null;
+  settings: SettingsDbItem;
 }
 
 export interface ChatMessageDbItem {
@@ -31,14 +31,14 @@ export interface CardDbItem {
 export interface TurnDbItem {
   team: string;
   isMaster: boolean;
-}
-
-export interface ResultDbItem {
-  team: string;
-  win: boolean;
+  win?: boolean;
 }
 
 export interface WordDbItem {
   id: string;
   value: string;
+}
+
+export interface SettingsDbItem {
+  isLocked: boolean;
 }

@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { GameServiceContext } from "../common/GameService.ts";
 import Card from "./Card.tsx";
 
-function Cards({ className }: { className?: string }) {
+function Cards() {
   const gameService = useContext(GameServiceContext);
 
   const cards =
@@ -17,12 +17,10 @@ function Cards({ className }: { className?: string }) {
         }));
 
   return (
-    <div className={`${className}`}>
-      <div className="h-full grid grid-cols-5 grid-rows-5 gap-1 lg:gap-3">
-        {cards.map((card, index) => (
-          <Card key={index} card={card} />
-        ))}
-      </div>
+    <div className="h-full grid grid-cols-5 grid-rows-5 gap-1 lg:gap-3">
+      {cards.map((card, index) => (
+        <Card key={index} card={card} />
+      ))}
     </div>
   );
 }

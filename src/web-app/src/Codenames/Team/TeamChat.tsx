@@ -37,20 +37,19 @@ function TeamChat({ team }: { team: TeamEnum }) {
         {gameService.isMaster(team) ? (
           <>
             <AppInput
-              disabled={!gameService.isPlayerTurn(team)}
+              disabled={!gameService.isPlayerTurn()}
               value={message}
               onChange={event => setMessage(event.target.value)}
               onKeyDown={onMessageKeyDown}
             />
-            <AppButton
-              className="w-3/12"
-              disabled={!gameService.isPlayerTurn(team)}
-              text="Send"
-              onClick={onSendMessage}
-            />
+            <AppButton className="w-3/12" disabled={!gameService.isPlayerTurn()} text="Send" onClick={onSendMessage} />
           </>
         ) : (
-          <AppButton disabled={!gameService.isPlayerTurn(team)} text="End turn" onClick={gameService.endTurn} />
+          <AppButton
+            disabled={!gameService.isPlayerTurn() || gameService.player?.team != team}
+            text="End turn"
+            onClick={() => gameService.endTurn()}
+          />
         )}
       </div>
     </AppPanel>

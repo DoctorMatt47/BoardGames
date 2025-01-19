@@ -23,9 +23,28 @@ function Settings() {
         text="Restart"
         onClick={() => gameService.startGame()}
       />
-      <AppButton disabled={!gameService.player!.isAdmin} className="text-xs" text="Shuffle" />
-      <AppButton disabled={!gameService.player!.isAdmin} className="text-xs" text="Nickname" />
-      <AppButton disabled={!gameService.player!.isAdmin} className="text-xs" text="Nickname" />
+      <AppButton
+        disabled={!gameService.player!.isAdmin}
+        className="text-xs"
+        text="Shuffle"
+        onClick={() => gameService.teamsShuffle()}
+      />
+      {gameService.state.settings.isLocked ? (
+        <AppButton
+          disabled={!gameService.player!.isAdmin}
+          className="text-xs"
+          text="Unlock"
+          onClick={() => gameService.setTeamsLock(false)}
+        />
+      ) : (
+        <AppButton
+          disabled={!gameService.player!.isAdmin}
+          className="text-xs"
+          text="Lock"
+          onClick={() => gameService.setTeamsLock(true)}
+        />
+      )}
+      <AppButton disabled={!gameService.player!.isAdmin} className="text-xs" text="Not available" />
     </div>
   );
 }

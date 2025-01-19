@@ -3,9 +3,10 @@ import { TeamEnum } from "../Team/TeamEnum.ts";
 import { makeAutoObservable, runInAction } from "mobx";
 import { createContext } from "react";
 import { getClientColor, getClientId, getClientUsername, setClientUsername } from "./local-storage.ts";
-import { ChatMessageDbItem, PlayerDbItem } from "./db-items.ts";
+import { PlayerDbItem } from "./db-items.ts";
 import { arrayUnion } from "firebase/firestore";
 import { WordRepository } from "./WordRepository.ts";
+import { shuffled } from "../../common/utils.ts";
 
 export const GameServiceContext = createContext<GameService>(null!);
 
@@ -101,7 +102,12 @@ export class GameService {
       return;
     }
 
-    const turn = card.color == this.player!.team ? this.state.turn : { team: this.player!.team, isMaster: true };
+    const nextTeam = this.player!.team === TeamEnum.Blue ? TeamEnum.Red : TeamEnum.Blue;
+    const turn = card.color == this.player!.team ? this.state.turn! : { team: nextTeam, isMaster: true };
+
+    if (this.getRestCardCount(turn.team as TeamEnum) == 1 || card.color === "black") {
+      turn.win = true;
+    }
 
     await this.roomRepository.updateItems({
       cards: this.state.cards.map(c => (c.id === card.id ? { ...card, revealed: true } : c)),
@@ -160,8 +166,10 @@ export class GameService {
   }
 
   async endTurn() {
+    const nextTeam = this.state.turn!.team === TeamEnum.Blue ? TeamEnum.Red : TeamEnum.Blue;
+
     await this.roomRepository.updateItems({
-      turn: { team: this.state.turn!.team, isMaster: true },
+      turn: { team: nextTeam, isMaster: true },
     });
   }
 
@@ -171,6 +179,14 @@ export class GameService {
 
   getAllCardCount(team: TeamEnum) {
     return this.state.cards.filter(c => c.color === team.toString()).length;
+  }
+
+  async setTeamsLock(isLocked: boolean) {
+    await this.roomRepository.updateItems({
+      settings: {
+        isLocked: isLocked,
+      },
+    });
   }
 
   async startGame() {
@@ -193,7 +209,7 @@ export class GameService {
       ...Array(7).fill("white"),
     ];
 
-    const shuffledColors = cardColors.sort(() => Math.random() - 0.5);
+    const shuffledColors = shuffled(cardColors);
 
     await this.roomRepository.updateItems({
       chatMessages: [],
@@ -210,10 +226,31 @@ export class GameService {
     });
   }
 
-  private async putMessage(message: ChatMessageDbItem) {
+  async teamsShuffle() {
+    if (this.state.players.length === 1) {
+      await this.updatePlayer({
+        ...this.state.players[0],
+        isMaster: true,
+        team: Math.random() > 0.5 ? TeamEnum.Blue : TeamEnum.Red,
+      });
+
+      return;
+    }
+
+    const players = shuffled(this.state.players);
+
+    const redMaster = { ...players[0], team: TeamEnum.Red, isMaster: true };
+    const blueMaster = { ...players[1], team: TeamEnum.Blue, isMaster: true };
+
+    const sliceLength = Math.floor(
+      players.length % 2 === 0 ? players.length / 2 : players.length / 2 + (Math.random() > 0.5 ? 1 : 0),
+    );
+
+    const redPlayers = players.slice(2, sliceLength + 1).map(p => ({ ...p, team: TeamEnum.Red, isMaster: false }));
+    const bluePlayers = players.slice(sliceLength + 1).map(p => ({ ...p, team: TeamEnum.Blue, isMaster: false }));
+
     await this.roomRepository.updateItems({
-      chatMessages: arrayUnion(message),
-      turn: { team: message.team, isMaster: false },
+      players: [redMaster, blueMaster, ...redPlayers, ...bluePlayers],
     });
   }
 

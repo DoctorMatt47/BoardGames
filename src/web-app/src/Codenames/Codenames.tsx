@@ -8,6 +8,7 @@ import Team from "./Team/Team.tsx";
 import Cards from "./Cards/Cards.tsx";
 import { TeamEnum } from "./Team/TeamEnum.ts";
 import { WordRepository } from "./common/WordRepository.ts";
+import WinResult from "./WinResult/WinResult.tsx";
 
 function Codenames() {
   const navigate = useNavigate();
@@ -46,9 +47,16 @@ function Codenames() {
         <GameServiceContext.Provider value={gameService}>
           <div className="container flex flex-grow items-center justify-center">
             <div className="grid grid-cols-2 lg:grid-cols-4 grid-rows-2 lg:grid-rows-1 gap-1 lg:gap-5 w-full h-full 2xl:w-9/12">
-              <Team className="order-1 lg:order-2" team={TeamEnum.Blue} />
-              <Cards className="order-3 lg:order-2 col-span-2 lg:mt-0" />
-              <Team className="order-2 lg:order-3" team={TeamEnum.Red} />
+              <div className="order-1 lg:order-2">
+                <Team team={TeamEnum.Blue} />
+              </div>
+              <div className="order-3 lg:order-2 col-span-2 lg:mt-0 relative">
+                <WinResult />
+                <Cards />
+              </div>
+              <div className="order-2 lg:order-3">
+                <Team team={TeamEnum.Red} />
+              </div>
             </div>
           </div>
           <Settings />

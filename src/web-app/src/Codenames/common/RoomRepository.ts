@@ -1,8 +1,7 @@
-﻿import { arrayUnion, doc, DocumentReference, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
+﻿import { doc, DocumentReference, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { makeAutoObservable, runInAction } from "mobx";
 import { db } from "../../firebase.ts";
-import { CardDbItem, ChatMessageDbItem, PlayerDbItem, RoomDbItem } from "./db-items.ts";
-import { TeamEnum } from "../Team/TeamEnum.ts";
+import { RoomDbItem } from "./db-items.ts";
 import { FieldValue } from "firebase/firestore"; // or appropriate import
 
 type UpdateFields<T> = {
@@ -13,8 +12,10 @@ const initState = {
   chatMessages: [],
   cards: [],
   players: [],
+  settings: {
+    isLocked: false,
+  },
   turn: null,
-  result: null,
 } as RoomDbItem;
 
 export class RoomRepository {
