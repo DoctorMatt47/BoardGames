@@ -21,10 +21,8 @@ jobs:
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
-        working-directory: ./src/web-app
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
           
       - name: Install dependencies
         working-directory: ./src/web-app
