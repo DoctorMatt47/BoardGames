@@ -33,6 +33,7 @@ jobs:
         run: npm run build
 
       - name: Deploy to GitHub Pages
+        working-directory: ./src/web-app
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
