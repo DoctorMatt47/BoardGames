@@ -1,37 +1,33 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main  # Adjust if you use a different default branch
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Node.js environment
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Use the Node version you require
+          node-version: '16'
+          
+      - name: Navigate to the web-app directory
+        run: cd ./src/web-app
 
-      # Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Build the Vite app
       - name: Build
         run: npm run build
 
-      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages         # The branch to deploy to.
-          folder: dist             # The folder with the build output.
-          clean: true              # Optional: clean the target branch before deploying.
+          branch: gh-pages
+          folder: dist
+          clean: true              
