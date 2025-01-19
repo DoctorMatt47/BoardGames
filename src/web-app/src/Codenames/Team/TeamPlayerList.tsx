@@ -13,13 +13,13 @@ function TeamPlayerList({ team }: { team: TeamEnum }) {
   return (
     <>
       <div className="lg:text-xl text-center mt-1 lg:mt-2">Master</div>
-      {master ? (
-        <AppPanel>
+      <AppPanel>
+        {master ? (
           <Player player={master} />
-        </AppPanel>
-      ) : (
-        <AppButton text="Become master" onClick={() => gameService.becomeMaster(team)} />
-      )}
+        ) : (
+          <AppButton text="Become master" onClick={() => gameService.becomeMaster(team)} />
+        )}
+      </AppPanel>
       <div className="lg:text-xl text-center mt-1 lg:mt-2">Players</div>
       <AppPanel>
         <div className="flex flex-col space-y-1 lg:space-y-2 h-20 lg:h-40 overflow-auto">

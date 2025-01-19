@@ -13,12 +13,11 @@ import WinResult from "./WinResult/WinResult.tsx";
 function Codenames() {
   const navigate = useNavigate();
   const { roomId } = useParams();
-  const roomRepository = useMemo(() => new RoomRepository(roomId!), [roomId]);
   const wordRepository = useMemo(() => new WordRepository(), []);
+  const roomRepository = useMemo(() => new RoomRepository(roomId!), [roomId]);
   const gameService = useMemo(() => new GameService(roomRepository, wordRepository), [roomRepository, wordRepository]);
 
   useEffect(() => {
-    console.log("Subscribing to room");
     return roomRepository.subscribe();
   }, [roomRepository]);
 
@@ -26,16 +25,13 @@ function Codenames() {
     if (!gameService.isLoaded) return;
 
     void gameService.connectPlayer();
-    console.log("Connecting player");
 
     return () => {
       void gameService.disconnectPlayer();
-      console.log("Disconnecting player");
     };
   }, [gameService, gameService.isLoaded]);
 
   useEffect(() => {
-    console.log("Checking if player is connected");
     if (gameService.isConnected && !gameService.player) {
       navigate("/");
     }

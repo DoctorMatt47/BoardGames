@@ -1,4 +1,4 @@
-﻿import { useContext, useEffect, useState } from "react";
+﻿import { useContext } from "react";
 import { observer } from "mobx-react-lite";
 import { GameServiceContext } from "../common/GameService.ts";
 import Card from "./Card.tsx";
