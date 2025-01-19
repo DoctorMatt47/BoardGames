@@ -21,19 +21,18 @@ jobs:
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
+        working-directory: ./src/web-app
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
           
       - name: Install dependencies
-        run: |
-          cd ./src/web-app
-          pnpm install
+        working-directory: ./src/web-app
+        run: pnpm install
 
       - name: Build
-        run: |
-          cd ./src/web-app
-          npm run build
+        working-directory: ./src/web-app
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
